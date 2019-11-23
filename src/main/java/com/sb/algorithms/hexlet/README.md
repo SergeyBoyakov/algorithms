@@ -1,0 +1,1 @@
+This package contains some tasks from Hexlet.io courses
