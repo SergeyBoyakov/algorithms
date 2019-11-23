@@ -2,6 +2,8 @@
 const smallestDivisor = (num) => {
     if (num === 1) {
         return 1;
+    } else if (num <= 0) {
+        return NaN;
     } else {
         const iter = (candidate, num) => {
             if (num % candidate === 0) {
@@ -19,6 +21,8 @@ console.log(smallestDivisor(1) === 1);
 console.log(smallestDivisor(2) === 2);
 console.log(smallestDivisor(15) === 3);
 console.log(smallestDivisor(17) === 17);
+console.log(isNaN(smallestDivisor(0)));
+console.log(isNaN(smallestDivisor(-3)));
 
 /*
 Реализуйте тело функции smallestDivisor, используя итеративный процесс. Эта функция должна находить наименьший делитель
