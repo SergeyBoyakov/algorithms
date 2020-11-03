@@ -25,6 +25,7 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public boolean contains(final Object element) {
+
         for (int i = 0; i < size; i++) {
             if (array[i].equals(element)) return true;
         }

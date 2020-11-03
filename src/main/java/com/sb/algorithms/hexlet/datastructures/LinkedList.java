@@ -50,15 +50,13 @@ public class LinkedList<T> implements List<T> {
     public boolean add(final T newElement) {
         // BEGIN (write your solution here)
         if (firstInList == null) {
-            firstInList = new Item<T>(newElement, null, null);
+            firstInList = new Item<>(newElement, null, null);
             lastInList = firstInList;
-            size++;
-        } else {
-            lastInList.nextItem = new Item<>(newElement, lastInList, null);
-            lastInList = lastInList.nextItem;
-            size++;
         }
 
+        lastInList.nextItem = new Item<>(newElement, lastInList, null);
+        lastInList = lastInList.nextItem;
+        size++;
         return true;
         // END
     }
@@ -66,7 +64,8 @@ public class LinkedList<T> implements List<T> {
     @Override
     public boolean remove(final Object o) {
         // BEGIN (write your solution here)
-        return true;
+        return false;
+
         // END
     }
 
@@ -170,119 +169,65 @@ public class LinkedList<T> implements List<T> {
     @Override
     public T get(final int index) {
         // BEGIN (write your solution here)
-        return getItemByIndex(index).element;
+        return null;
         // END
     }
 
     private Item<T> getItemByIndex(final int index) {
         // BEGIN (write your solution here) An auxiliary method for searching for node by index.
-        if (index < 0 || index > size) {
-            throw new NoSuchElementException();
-        }
-
-        if (index == 0) {
-            return firstInList;
-        }
-
-        int currentIndex = 0;
-        Item<T> currentItem = LinkedList.this.firstInList;
-        while (currentIndex < index) {
-            currentItem = currentItem.nextItem;
-            currentIndex++;
-        }
-
-        return currentItem;
+        return null;
         // END
     }
 
     private class ElementsIterator implements ListIterator<T> {
 
         private Item<T> currentItemInIterator;
+
         private Item<T> lastReturnedItemFromIterator;
+
         private int index = 0;
-        private Boolean nextCalled = null;
 
         ElementsIterator(final int index) {
             // BEGIN (write your solution here)
             this.index = index;
-            this.currentItemInIterator = getItemByIndex(index);
+
             // END
         }
 
         @Override
         public boolean hasNext() {
             // BEGIN (write your solution here)
-            if (lastReturnedItemFromIterator == null)
-                return currentItemInIterator != null;
-
-            return lastReturnedItemFromIterator.nextItem != null;
+            return currentItemInIterator.nextItem != null;
             // END
         }
 
         @Override
         public T next() {
             // BEGIN (write your solution here)
-            if (size == 0) {
+            if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-
-            if (index >= size || index < -1) {
-                throw new NoSuchElementException();
-            }
-
-            if (currentItemInIterator == null) {
-                throw new NoSuchElementException();
-            }
-
-            Item<T> nextItem = this.currentItemInIterator;
-
-            index++;
-            nextCalled = true;
-
-            lastReturnedItemFromIterator = currentItemInIterator;
+            Item<T> next = currentItemInIterator.nextItem;
             currentItemInIterator = currentItemInIterator.nextItem;
+            index++;
 
-            return nextItem.element;
+            return next.element;
             // END
         }
 
         @Override
         public boolean hasPrevious() {
             // BEGIN (write your solution here)
-            return index > 0;
+            return currentItemInIterator.prevItem != null;
             // END
         }
 
         @Override
         public T previous() {
             // BEGIN (write your solution here)
-            if (size == 0)
-                throw new NoSuchElementException();
-
-            if (index > size || index < 0) {
-                throw new NoSuchElementException();
-            }
-
-            if (index == size) {
-                Item<T> previousItem = LinkedList.this.lastInList;
-                index--;
-                nextCalled = false;
-
-                currentItemInIterator = previousItem;
-                lastReturnedItemFromIterator = previousItem;
-
-                return previousItem.element;
-            }
-
-            if (currentItemInIterator.prevItem == null)
-                throw new NoSuchElementException();
-
             Item<T> prevItem = currentItemInIterator.prevItem;
+            currentItemInIterator = currentItemInIterator.prevItem;
             index--;
-            nextCalled = false;
-
-            currentItemInIterator = prevItem;
-            lastReturnedItemFromIterator = prevItem;
 
             return prevItem.element;
             // END
@@ -310,30 +255,19 @@ public class LinkedList<T> implements List<T> {
         @Override
         public int nextIndex() {
             // BEGIN (write your solution here)
-            return 0;
+            if (size <= index + 1) {
+                return size;
+            }
+
+            return index + 1;
             // END
         }
+
 
         @Override
         public void remove() {
             // BEGIN (write your solution here)
-            if (nextCalled == null)
-                throw new IllegalStateException();
 
-            if (lastReturnedItemFromIterator.nextItem != null)
-                lastReturnedItemFromIterator.nextItem.prevItem = lastReturnedItemFromIterator.prevItem;
-
-            if (lastReturnedItemFromIterator.prevItem != null)
-                lastReturnedItemFromIterator.prevItem.nextItem = lastReturnedItemFromIterator.nextItem;
-
-            lastReturnedItemFromIterator.nextItem = null;
-            lastReturnedItemFromIterator.prevItem = null;
-            lastReturnedItemFromIterator = null;
-            if (nextCalled) {
-                index--;
-            }
-            nextCalled = null;
-            size--;
             // END
         }
     }
